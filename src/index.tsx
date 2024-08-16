@@ -8,6 +8,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
+  // 开启StrictMode模式，主要目的有助于发现副作用（如：状态或输出的不可预期变化）的问题、减少组件的不必要重复渲染
   <React.StrictMode>
     <App />
   </React.StrictMode>

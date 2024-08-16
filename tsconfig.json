@@ -1,5 +1,12 @@
 {
   "compilerOptions": {
+    // 增加baseUrl和paths配置用于能识别@/路径
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
     "target": "es5",
     "lib": [
       "dom",
