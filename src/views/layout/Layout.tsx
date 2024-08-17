@@ -42,18 +42,27 @@ const menus: Array<menuItems> = [{
       link: "/main/reduxDemo"
     }
   ]
+}, {
+  key: "game",
+  label: "小游戏",
+  children: [
+    {
+      key: "airGame",
+      label: "飞机激战",
+      link: "/main/airGame"
+    }
+  ]
 }]
 
 const items2: MenuProps['items'] = menus.map(
   (item, index) => {
-    const icons = [UserOutlined, LaptopOutlined, NotificationOutlined]
-    const key = String(index + 1);
+    const icons = [UserOutlined, LaptopOutlined, NotificationOutlined, NotificationOutlined];
 
     return {
       key: item.key,
       icon: React.createElement(icons[index]),
       label: item.label,
-      children: item.children && item.children.map((cItem, cIndex) => {
+      children: item.children && item.children.map((cItem) => {
         return {
           key: cItem.key,
           label: cItem.label,
@@ -82,7 +91,7 @@ const App: React.FC = () => {
   const changeMenu = (e: any) => {
     // console.log("改变菜单", e.key);
     const allMenus = flatMenus();
-    const obj = allMenus.find(v => v.key == e.key);
+    const obj = allMenus.find(v => v.key === e.key);
     if(obj?.link) {
       navigate(obj.link, {
         state: { menuKey: obj.key }

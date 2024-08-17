@@ -1,0 +1,43 @@
+.game-container {
+    width: 375px;
+    height: 667px;
+    border: solid 1px #ccc;
+    background-color: #fff;
+    margin: 0 auto;
+    background: url("./images/bg_game.jpg");
+}
+
+/* .bg-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.bg1 {
+    background: url("./images/bg_game.jpg");
+} */
+
+.ready {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.btn-chost {
+    width: 160px;
+    height: 40px;
+    line-height: 40px;
+    border: solid 2px #333;
+    text-align: center;
+    color: #333;
+    cursor: pointer;
+}
+.btn-chost:hover {
+    color: aquamarine;
+    border-color: aquamarine;
+}
