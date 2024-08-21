@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./PlayGame.css";
 
+interface EnemyAttribute {
+    width: number,
+    height: number,
+    score: number,
+    hp: number
+}
 
 // 初始定义游戏桌布属性（TODO 按照实际尺寸进行适配）
 const gw = 375 - 4,  // 游戏画布尺寸（需要减去边框间距等）
@@ -9,7 +15,31 @@ const gw = 375 - 4,  // 游戏画布尺寸（需要减去边框间距等）
 const bulletWidth = 6,  // 子弹宽高
     bulletHeight = 14;
 
+// 敌机属性数据对象
+const enemyAttrs: Array<EnemyAttribute> = [
+    {
+        width: 34,
+        height: 24,
+        score: 5,
+        hp: 30
+    },
+    {
+        width: 60,
+        height: 40,
+        score: 10,
+        hp: 50
+    },
+    {
+        width: 80,
+        height: 100,
+        score: 20,
+        hp: 100
+    },
+]
+
+
 let bulletTimer: number | NodeJS.Timeout;  // 子弹定时器
+let enemyTimer: number | NodeJS.Timeout;  // 创建敌机定时器
 
 
 const PlayGame: React.FC = () => {
@@ -19,6 +49,8 @@ const PlayGame: React.FC = () => {
     const [gameStatus, setgameStatus] = useState<number>(1);
     const gameStatusRef = useRef(gameStatus);
     const [playerStyle, setplayerStyle] = useState({});
+    const [bullets, setbullets] = useState<Array<HTMLImageElement>>([]);
+    const [enemies, setenemies] = useState<Array<HTMLImageElement>>([]);
 
     useEffect(() => {
         console.log("游戏状态改变：", gameStatus);
@@ -32,6 +64,8 @@ const PlayGame: React.FC = () => {
         // 绑定键盘控制事件
         window.addEventListener("keydown", handleKeydown);
         startShot();
+
+        appearEnemy();  // 创建敌机
     }
     // 暂停游戏
     function onPaused() {
@@ -39,6 +73,7 @@ const PlayGame: React.FC = () => {
         setgameStatus(0);
         window.removeEventListener("keydown", handleKeydown);
         clearInterval(bulletTimer);  // 不再创建子弹
+        clearInterval(enemyTimer);  // 不再创建敌机
     }
 
     // 设置玩家初始位置
@@ -105,6 +140,7 @@ const PlayGame: React.FC = () => {
         bullet.setAttribute("style", `position: absolute;left: ${x + pw / 2 - bulletWidth / 2}px;top: ${y - bulletHeight}px;`)
         const game = document.querySelector(".game");
         game?.appendChild(bullet);
+        setbullets(prev => [...prev, bullet]);
         // console.log("创建子弹", bullet);
         bulletMove(bullet);  // 创建完成后子弹开始运动
     }
@@ -116,6 +152,7 @@ const PlayGame: React.FC = () => {
             if (bulletTop < 1) {
                 elBullet.parentNode?.removeChild(elBullet);
                 clearInterval(moveTimer);
+                setbullets(prev => prev.slice(0, -1));
                 return;
             }
             elBullet.style.top = bulletTop - speed + "px";
@@ -133,17 +170,79 @@ const PlayGame: React.FC = () => {
         }
     }
 
+    // 间隔时间出现敌机
+    function appearEnemy() {
+        enemyTimer = setInterval(() => {
+            createEnemy();
+        }, 5000);
+    }
+    // 制造敌机的函数
+    function createEnemy() {
+        // 机型出现概率
+        const percentData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3];
+        // 敌机类型：大 中 小
+        const enemyType = percentData[Math.floor(Math.random() * percentData.length)];
+        const enemyAttr = enemyAttrs[enemyType - 1];
+        const enemy = new Image(enemyAttr.width, enemyAttr.height);
+        enemy.src = require("./images/enemy.png");
+        enemy.setAttribute("score", enemyAttr.score + "");
+        enemy.setAttribute("hp", enemyAttr.hp + "");
+        const left = Math.floor(Math.random() * (gw - enemyAttr.width + 1));
+        const top = enemyAttr.height;
+        enemy.style.position = "absolute";
+        enemy.style.left = left + "px";
+        enemy.style.top = top + "px";
+        // 添加到画布中
+        const game = document.querySelector(".game");
+        game?.append(enemy);
+        // console.log("添加敌机~~~~~");
+        setenemies(prev => [...prev, enemy]);
+
+        // 调用运动函数
+        moveEnemy(enemy);
+    }
+    // 敌机运动
+    function moveEnemy(elEnemy: HTMLImageElement) {
+        const speed = 8;  // 运动速度
+        const moveTimer = setInterval(() => {
+            const top = parseInt(elEnemy.style.top);
+            if (top > gh) {
+                elEnemy.parentNode?.removeChild(elEnemy);
+                clearInterval(moveTimer);
+                setenemies(prev => prev.slice(0, -1));
+                return;
+            }
+            elEnemy.style.top = top + speed + "px";
+            attacked();  // 检测敌机与子弹碰撞
+        }, 300);
+    }
+    // 敌机被攻击（即敌机与子弹发生碰撞）
+    function attacked() {
+        // TODO 遍历所有子弹和敌机，是否发生碰撞。若碰撞，销毁子弹，切计算敌机血量，血量小于0销毁敌机
+        // TODO 敌机血量小于0销毁并增加积分
+    }
+
+
+
+    // 临时测试 监听器
+    useEffect(() => {
+        console.log("敌机数量变化：", enemies.length);
+        console.log("子弹数量变化：", bullets.length);
+    }, [enemies, bullets])
 
     useEffect(() => {
         initPlayer();
 
         window.addEventListener("keydown", togglePlay);
 
-
+ 
         // 销毁定时器等
         return () => {
             if (bulletTimer) {
                 clearInterval(bulletTimer);
+            }
+            if (enemyTimer) {
+                clearInterval(enemyTimer);
             }
             window.removeEventListener("keydown", togglePlay);
             window.removeEventListener("keydown", handleKeydown);
