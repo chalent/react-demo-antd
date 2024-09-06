@@ -1,6 +1,6 @@
 import "./Index.css"
 import { useState } from "react";
-import { Button, Input } from "antd";
+import { Button } from "antd";
 
 import InputSubmit from "./components/InputSubmit";
 
