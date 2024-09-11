@@ -9,4 +9,5 @@
 .main-flex {
     display: flex;
     justify-content: start;
+    margin: 20px 10px;
 }

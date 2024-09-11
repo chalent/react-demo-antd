@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "antd";
 
 import InputSubmit from "./components/InputSubmit";
+import Parent from "./components/Parent";
 
 export default function Dashboard() {
 
@@ -28,6 +29,9 @@ export default function Dashboard() {
                         <p style={{ textAlign: 'left' }}>【父子组件传值】请输入你的文字：{ inputText }</p>
                         <InputSubmit text={ inputText } onTextChange={ onChange } />
                     </div>
+
+                    {/* 父子组件或跨组件操作测试 */}
+                    <Parent />
                 </div>
             </div>
         </div>
