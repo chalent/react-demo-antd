@@ -1,0 +1,28 @@
+.tab-container {
+    width: 100%;
+}
+
+.tab-btns {
+    display: flex;
+    align-items: center;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: solid 1px #ccc;
+    border-left: none;
+    background-color: #eee;
+    cursor: pointer;
+}
+.tab-btn:first-child {
+    border-left: solid 1px #ccc;
+}
+.active {
+    background-color: #fff;
+    color: #09f;
+}
+
+.tab-content {
+    padding: 20px;
+    text-align: left;
+}

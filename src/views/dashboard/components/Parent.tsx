@@ -38,7 +38,7 @@ export default function Parent() {
     function handleClick() {
         setcount(count + 1);
 
-        // setbname("yeyou");  // 使用React.memo包裹子组件时，不执行这行改变子组件的props，不会更新子组件
+        // setbname("yeyou");  // 取消注释此行，点击时才会重新渲染子组件。使用React.memo包裹子组件时，不执行这行改变子组件的props，不会更新子组件
     }
 
     const data = useMemo(() => {

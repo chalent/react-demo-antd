@@ -1,9 +1,10 @@
 import "./Index.css"
 import { useState } from "react";
-import { Button } from "antd";
+import { Button, Divider } from "antd";
 
 import InputSubmit from "./components/InputSubmit";
 import Parent from "./components/Parent";
+import TabDemo from "./components/TabDemo";
 
 export default function Dashboard() {
 
@@ -32,7 +33,13 @@ export default function Dashboard() {
 
                     {/* 父子组件或跨组件操作测试 */}
                     <Parent />
+
                 </div>
+
+                <Divider />
+
+                 {/* 用于演示react fiber架构相关示例 */}
+                 <TabDemo />
             </div>
         </div>
     )
